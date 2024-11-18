@@ -64,7 +64,6 @@ exports.updateProductCategory = async (req, res) => {
       message: "No Category Found for Given Id",
     });
   }
-  console.log(productCategory);
   res.status(200).json({
     status: "success",
     message: "successfully updated product category",

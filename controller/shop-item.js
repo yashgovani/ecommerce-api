@@ -23,8 +23,13 @@ exports.createShopItems = async (req, res) => {
       categoryId,
     });
 
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
+    await newProduct.save().then((shopItem) => {
+      res.status(201).send({
+        status: "success",
+        message: "product successfully added",
+        shopItem,
+      });
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to create product", error });
@@ -32,7 +37,7 @@ exports.createShopItems = async (req, res) => {
 };
 
 exports.deleteShopItems = async (req, res) => {
-  const shopItem = await ShopItems.deleteOne({ id: req.params.id });
+  const shopItem = await ShopItems.findByIdAndDelete(req.params.id);
   if (!shopItem) {
     return next(
       res.status(204).json({
@@ -55,7 +60,7 @@ exports.updateShopItems = async (req, res) => {
     runValidators: true,
   });
   if (!shopItem) {
-    res.status(404).json({
+    return res.status(404).json({
       status: "failed",
       message: "No item Found for Given Id",
     });
@@ -63,8 +68,6 @@ exports.updateShopItems = async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "successfully updated shop item",
-    data: {
-      shopItem,
-    },
+    shopItem,
   });
 };
