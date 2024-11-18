@@ -45,14 +45,13 @@ const shopItems = new Schema({
     required: true,
   },
   categoryId: {
-    type: mongoose.Schema.Types.ObjectId, // This will reference the Category model by ObjectId
-    ref: ProductCategory, // Use the Category model for population
+    type: mongoose.Schema.Types.ObjectId,
+    ref: ProductCategory,
     required: true,
     validate: {
       validator: async function (value) {
-        // Check if category exists in ProductCategory collection
         const category = await ProductCategory.findById(value);
-        return category != null; // Return true if category exists, false otherwise
+        return category != null;
       },
       message: "Category ID does not exist in the ProductCategory collection",
     },

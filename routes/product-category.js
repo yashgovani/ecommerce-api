@@ -8,6 +8,9 @@ router
   .get(productCategoryController.getProductCategory)
   .post(productCategoryController.postProductCategory);
 
-router.route("/:id").delete(productCategoryController.deleteProductCategory);
+router
+  .route("/:id")
+  .delete(productCategoryController.deleteProductCategory)
+  .put(productCategoryController.updateProductCategory);
 
 module.exports = router;

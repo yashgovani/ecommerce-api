@@ -8,4 +8,9 @@ router
   .get(shopItemsController.fetchShopItems)
   .post(shopItemsController.createShopItems);
 
+router
+  .route("/:id")
+  .delete(shopItemsController.deleteShopItems)
+  .put(shopItemsController.updateShopItems);
+
 module.exports = router;
