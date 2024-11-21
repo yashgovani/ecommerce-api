@@ -1,4 +1,5 @@
 const ShopItems = require("../models/shopModel");
+const ProductCategory = require("../models/productModel");
 
 exports.fetchShopItems = async (req, res) => {
   const shopItems = await ShopItems.find();
@@ -70,4 +71,34 @@ exports.updateShopItems = async (req, res) => {
     message: "successfully updated shop item",
     shopItem,
   });
+};
+
+exports.categoriesWithItems = async (req, res) => {
+  try {
+    // Step 1: Fetch all categories
+    const categories = await ProductCategory.find();
+
+    // Step 2: For each category, get the items associated with it
+    const result = [];
+
+    for (const category of categories) {
+      const items = await ShopItems.find({ categoryId: category._id });
+
+      result.push({
+        _id: category._id,
+        title: category.title,
+        items: items,
+      });
+    }
+
+    // Send the result as response
+    res.status(200).json({
+      status: "success",
+      message: "successfully fetched category with items",
+      shopItems: result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
 };

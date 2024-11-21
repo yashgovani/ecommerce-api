@@ -13,4 +13,8 @@ router
   .delete(shopItemsController.deleteShopItems)
   .put(shopItemsController.updateShopItems);
 
+router
+  .route("/categories-with-items")
+  .get(shopItemsController.categoriesWithItems);
+
 module.exports = router;

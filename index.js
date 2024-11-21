@@ -5,6 +5,7 @@ const cors = require("cors");
 const Signup = require("./models/userModel");
 const productCategoryRouter = require("./routes/product-category");
 const shopItemsRouter = require("./routes/shop-item");
+const orderRouter = require("./routes/order");
 const authRouter = require("./routes/auth");
 
 const uri =
@@ -50,6 +51,7 @@ app.use(cors());
 app.use("/product-category", productCategoryRouter);
 app.use("/shop-items", shopItemsRouter);
 app.use("/user", authRouter);
+app.use("/order", orderRouter);
 
 // nodejs process to get exit
 process.on("SIGINT", async () => {

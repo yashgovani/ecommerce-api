@@ -38,6 +38,7 @@ exports.userSignIn = async (req, res) => {
     res.status(200).send({
       status: "success",
       message: "SignIn successful",
+      user,
     });
   }
 };
