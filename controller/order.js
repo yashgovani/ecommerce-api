@@ -85,11 +85,6 @@ exports.fetchUserOrder = async (req, res) => {
       "orderedItems.productId"
     ); // Populate product details for each orderedItem
 
-    // If no orders are found for this user
-    if (orders.length === 0) {
-      return res.status(404).json({ message: "No orders found for this user" });
-    }
-
     // Return the orders as a response
     return res.status(200).json({
       message: "Orders fetched successfully",

@@ -1,6 +1,7 @@
 const UserModel = require("../models/userModel");
 const ProductCategory = require("../models/productModel");
 const ShopItems = require("../models/shopModel");
+const Orders = require("../models/orderModel");
 
 exports.userSignUp = async (req, res) => {
   const email = req.body.email;
@@ -50,6 +51,8 @@ exports.fetchDashboardData = async (req, res, next) => {
 
     // 2. Get the total count of ShopItems
     const shopItemCount = await ShopItems.countDocuments();
+    const orderCount = await Orders.countDocuments();
+    const userCount = await UserModel.countDocuments();
 
     // 3. Aggregate shop items by categoryId and count how many items per category
     const categoryDistribution = await ProductCategory.aggregate([
@@ -70,7 +73,9 @@ exports.fetchDashboardData = async (req, res, next) => {
     ]);
 
     // 4. Respond with the data
-    res.json({
+    res.status(200).json({
+      orderCount,
+      userCount,
       productCategoryCount,
       shopItemCount,
       categoryDistribution,
