@@ -15,6 +15,10 @@ const shopItems = new Schema({
     type: Number,
     required: true,
   },
+  deletedAt: {
+    type: Date,
+    default: null,
+  },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: ProductCategory,

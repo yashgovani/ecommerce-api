@@ -1,8 +1,9 @@
 const ProductCategory = require("../models/productModel");
 
 exports.getProductCategory = async (req, res) => {
-  const productCategories = await ProductCategory.find();
-  res.status(200).send({
+  const productCategories = await ProductCategory.find({ deletedAt: null });
+
+  res.status(200).json({
     status: "success",
     results: productCategories.length,
     productCategories,
@@ -31,19 +32,28 @@ exports.postProductCategory = async (req, res) => {
 };
 
 exports.deleteProductCategory = async (req, res) => {
-  const category = await ProductCategory.findByIdAndDelete(req.params.id);
+  const category = await ProductCategory.findById(req.params.id);
+
   if (!category) {
-    return next(
-      res.status(204).json({
-        status: "success",
-        message: "No product category found with that ID",
-        data: null,
-      })
-    );
+    return res.status(404).json({
+      status: "failed",
+      message: "No product category found with that ID",
+    });
   }
+
+  if (category.deletedAt) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Category already deleted",
+    });
+  }
+
+  category.deletedAt = new Date();
+  await category.save();
+
   res.status(200).json({
     status: "success",
-    message: "category deleted successfully",
+    message: "Category deleted successfully",
     data: null,
   });
 };

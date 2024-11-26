@@ -2,7 +2,7 @@ const ShopItems = require("../models/shopModel");
 const ProductCategory = require("../models/productModel");
 
 exports.fetchShopItems = async (req, res) => {
-  const shopItems = await ShopItems.find();
+  const shopItems = await ShopItems.find({ deletedAt: null });
   res.status(200).send({
     status: "success",
     results: shopItems.length,
@@ -38,16 +38,27 @@ exports.createShopItems = async (req, res) => {
 };
 
 exports.deleteShopItems = async (req, res) => {
-  const shopItem = await ShopItems.findByIdAndDelete(req.params.id);
+  const shopItem = await ShopItems.findById(req.params.id);
+
   if (!shopItem) {
     return next(
-      res.status(204).json({
-        status: "success",
+      res.status(404).json({
+        status: "failed",
         message: "No shop item found with that ID",
         data: null,
       })
     );
   }
+  if (shopItem.deletedAt) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Shop Item already deleted",
+    });
+  }
+
+  shopItem.deletedAt = new Date();
+  await shopItem.save();
+
   res.status(200).json({
     status: "success",
     message: "shop item deleted successfully",

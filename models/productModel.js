@@ -15,6 +15,10 @@ const productCategories = new mongoose.Schema({
     enum: ["small", "medium", "large"],
     default: null,
   },
+  deletedAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const ProductCategory = mongoose.model(

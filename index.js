@@ -36,11 +36,6 @@ mongoose.connection.on("disconnected", () => {
 
 // Initializing express app
 const app = express();
-const router = express.Router();
-
-router.get("/", (req, res) => {
-  res.send("Application is running fine...");
-});
 
 // Initializing the server
 app.listen(3000, () => {
