@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const Signup = require("./models/userModel");
 const productCategoryRouter = require("./routes/product-category");
 const shopItemsRouter = require("./routes/shop-item");
 const orderRouter = require("./routes/order");
 const authRouter = require("./routes/auth");
+const serverless = require("serverless-http");
 
 const uri =
   "mongodb+srv://dhvyas143:OCaeCACoI26O1DDy@ecommerce-cluster.4o3k4.mongodb.net/";
@@ -37,6 +37,11 @@ mongoose.connection.on("disconnected", () => {
 
 // Initializing express app
 const app = express();
+const router = express.Router();
+
+router.get("/", (req, res) => {
+  res.send("Application is running fine...");
+});
 
 // Initializing the server
 app.listen(3000, () => {
@@ -52,6 +57,9 @@ app.use("/product-category", productCategoryRouter);
 app.use("/shop-items", shopItemsRouter);
 app.use("/user", authRouter);
 app.use("/order", orderRouter);
+
+app.use("/.netlify/function/api", router);
+module.exports.handler = serverless(app);
 
 // nodejs process to get exit
 process.on("SIGINT", async () => {
